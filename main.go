@@ -13,10 +13,17 @@ type EnvConfig struct {
 	LogFile string `envconfig:"LOG_FILE"`
 }
 
+func toFahrenheit(t Celsius) Fahrenheit {
+	var temp Fahrenheit
+
+	temp = Fahrenheit((t * 9 / 5) + 32)
+
+	return temp
+}
+
 func main()  {
 	var eConf EnvConfig
 	envconfig.Process("", &eConf)
-	eConf.LogFile = "file.log" 
 	file, _ := os.OpenFile(eConf.LogFile, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666)
 
 	var log = logrus.New() 
@@ -24,13 +31,4 @@ func main()  {
 
 	c := Celsius(32)
 	logrus.Info("Температура по фаренгейту - ", toFahrenheit(c))
-	
-}
-
-func toFahrenheit(t Celsius) Fahrenheit {
-	var temp Fahrenheit
-
-	temp = Fahrenheit((t * 9 / 5) + 32)
-
-	return temp
 }
